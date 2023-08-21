@@ -38,8 +38,9 @@ const goTo = (path:string)=>{
 </template>
 
 <style lang="scss" scoped>
-
+@import "../../common/style/mixins.scss";
 .footer_guide{
+  @include top-border-1px(#e4e4e4);
   position: fixed;
   display: flex;
   background-color: #fff;
@@ -50,12 +51,18 @@ const goTo = (path:string)=>{
   right: 0;
   bottom: 0;
   .guide_item{
+    justify-content: center;
     display: flex;
     align-items: center;
     flex-direction:column;
     flex: 1;
     &.on{
       color: #02a774;
+    }
+    .span{
+      font-size:12px;
+      margin-top: 2px;
+      margin-bottom: 2px;
     }
   }
 }
