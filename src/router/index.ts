@@ -3,6 +3,7 @@ import MSite from '@/views/MSite/MSite.vue'
 import Order from '@/views/Order/Order.vue'
 import Profile from '@/views/Profile/Profile.vue'
 import Search from '@/views/Search/Search.vue'
+import Login from '@/views/Login/Login.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,10 @@ const router = createRouter({
     {
       path:'/',
       redirect:'/msite'
+    },
+    {
+      path:'/login',
+      component:Login
     }
   ]
 })

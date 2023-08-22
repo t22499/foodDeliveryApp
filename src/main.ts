@@ -5,14 +5,17 @@ import '@/common/style/font_tubiao/iconfont.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { Swipe, SwipeItem } from 'vant';
+import { Swipe, SwipeItem } from 'vant'
+import { Icon } from 'vant'
+import 'vant/lib/index.css';
 
 import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
-app.use(Swipe);
-app.use(SwipeItem);
+app.use(Icon)
+app.use(Swipe)
+app.use(SwipeItem)
 app.use(createPinia())
 app.use(router)
 

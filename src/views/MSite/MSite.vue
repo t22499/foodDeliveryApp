@@ -167,11 +167,12 @@ import ShopList from '@/components/ShopList/ShopList.vue'
     font-size: 30px;
   }
   .msite_nav {//首页
-    position: relative;
     @include bottom-border-1px(#e4e4e4);
+    position: relative;
     height: 200px;
     margin-top: 45px;
     background: #fff;
+    overflow: hidden;
     .my-swipe{//轮播导航样式
       display: inline-block;
       width: 100%;
@@ -210,28 +211,8 @@ import ShopList from '@/components/ShopList/ShopList.vue'
           }
         }
       }
-      
-    }
-    .van-swipe__indicators{//轮播图下面圆点
-      position: absolute;
-      text-align: center;
-      transform: translate3d(0, 0, 0);
-      width: 100%;
-      height: 10px;
-      z-index: 10;
-      margin-top: -25px;
-      .van-swipe__indicator{
-        display: inline-block;
-        background: #000;
-        border-radius: 100%;
-        margin: 0 4px;
-        opacity: 0.4;
-        height: 8px;
-        width: 8px;
-      }
     }
   }
-
   .msite_shop_list {
     @include top-border-1px(#e4e4e4);
     margin-top: 10px;
@@ -252,6 +233,7 @@ import ShopList from '@/components/ShopList/ShopList.vue'
       }
     }
   }
+
 }
 
 </style>
