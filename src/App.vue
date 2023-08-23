@@ -5,7 +5,7 @@ import FooterGuide from './components/FooterGuide/FooterGuide.vue'
 
 <template>
     <router-view></router-view>
-    <FooterGuide></FooterGuide>
+    <FooterGuide v-show="$route.meta.showFooter"></FooterGuide>
 </template>
 
 <style lang="scss">
