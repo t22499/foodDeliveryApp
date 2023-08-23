@@ -20,19 +20,19 @@ const goTo = (path:string)=>{
       <span class="item_icon">
         <i class="iconfont icon-sousuo1"></i>
       </span>
-      <span>外卖</span>
+      <span>搜索</span>
     </a>
     <a class="guide_item" :class="{on:'/order' === route.path}" @click="goTo('/order')">
       <span class="item_icon">
         <i class="iconfont icon-quanbudingdan"></i>
       </span>
-      <span>外卖</span>
+      <span>订单</span>
     </a>
     <a class="guide_item" :class="{on:'/profile' === route.path}" @click="goTo('/profile')">
       <span class="item_icon">
         <i class="iconfont icon-geren1"></i>
       </span>
-      <span>外卖</span>
+      <span>我的</span>
     </a>
   </div>
 </template>
