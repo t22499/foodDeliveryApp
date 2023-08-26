@@ -1,6 +1,52 @@
 <script setup lang="ts">
 import HeaderTop from '@/components/HeaderTop/HeaderTop.vue'
 import ShopList from '@/components/ShopList/ShopList.vue'
+import {reqFoodCategorys} from '@/api/utils'
+import { ref } from 'vue';
+import { onMounted } from 'vue';
+
+//url
+const baseImageUrl = 'https://fuss10.elemecdn.com'
+
+//列表数据
+const foodCategorysList:any = ref({})
+
+//定义一个二维数组,将列表所有数据保存其中
+const foodCategorysArray:any = []
+//定义一个小数组长度为8
+let categoryArr:any = []
+
+
+//获取菜单种类列表
+const foodCategory = async ()=>{
+  const res = await reqFoodCategorys()
+  foodCategorysList.value = res.data
+  // console.log(foodCategorysList.value.length)
+
+  //如果大于
+  foodCategorysList.value.forEach((c:any) =>{
+
+    //如果大于8重新创建
+    if(categoryArr.length === 8){
+      categoryArr = []
+    }
+
+    //如果等于0就添加到二维数组里
+    if(categoryArr.length === 0){
+      foodCategorysArray.push(categoryArr)
+    }
+
+    //将当前数据添加到小数组
+    categoryArr.push(c)
+
+  })
+  console.log(foodCategorysArray)
+
+}
+
+onMounted(()=>{
+  foodCategory()
+})
 </script>
 
 <template>
@@ -23,109 +69,13 @@ import ShopList from '@/components/ShopList/ShopList.vue'
       <!-- 轮播导航 -->
       <nav class="msite_nav">
         <van-swipe class="my-swipe"  indicator-color="#02a774"  :show-indicators="true">
-          <van-swipe-item class="swiper-item" >
-            <div class="swiper-navigation">
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/1.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/2.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/3.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/4.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/5.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/6.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/7.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/8.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-            </div>
-          </van-swipe-item>
-          <van-swipe-item class="swiper-item" >
-            <div class="swiper-navigation">
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/9.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/10.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/11.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/12.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/13.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/14.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/2.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-              <a class="link_to_food" href="">
-                <div class="food_container">
-                  <img src="../../common/images/nav/13.jpg" alt="">
-                  <span>商品</span>
-                </div>
-              </a>
-            </div>
+          <van-swipe-item class="swiper-item" v-for="(foodCategorysList,index) in foodCategorysArray" :key="index">
+            <a class="link_to_food" href="" v-for=" (category,index) in foodCategorysList" :key="index">
+              <div class="food_container">
+                <img :src="baseImageUrl+category.image_url" alt="">
+                <span>{{ category.title }}</span>
+              </div>
+            </a>
           </van-swipe-item>
         </van-swipe>
       </nav>
@@ -180,33 +130,30 @@ import ShopList from '@/components/ShopList/ShopList.vue'
       color: #fff;
       text-align: center;
       .swiper-item{
-        display: inline-block;
-        .swiper-navigation{
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: flex-start;
-          flex-wrap: wrap;
-          .link_to_food{
-            width: 25%;
-            margin-bottom: 10px;
-            .food_container{
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              flex-direction: column;
-              img{
-                display: inline;
-                width: 50px;
-                height: 50px;
-              }
-              span{
-                display: block;
-                width: 100%;
-                text-align: center;
-                padding-bottom: 10px;
-                margin-top: 10px;
-              }
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        .link_to_food{
+          width: 25%;
+          margin-bottom: 10px;
+          .food_container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            img{
+              display: inline;
+              width: 50px;
+              height: 50px;
+            }
+            span{
+              display: block;
+              width: 100%;
+              text-align: center;
+              padding-bottom: 10px;
+              margin-top: 10px;
             }
           }
         }
