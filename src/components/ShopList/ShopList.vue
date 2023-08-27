@@ -1,17 +1,26 @@
 <script lang="ts" setup>
+import {useShopsStore} from '@/stores/shops'
+import { computed, onMounted } from 'vue';
+const shopsStore = useShopsStore()
+const reqShopsList:any = computed(()=>shopsStore.reqShopsList)
+console.log(reqShopsList.length)
+
+onMounted(() => {
+  shopsStore.reqShopsStores()
+})
 </script>
 
 <template>
-  <div class="shop_container">
+  <div class="shop_container" >
     <ul class="shop_list">
-      <li class="shop_li">
+      <li class="shop_li" v-for=" shopList in reqShopsList">
         <a>
           <div class="shop_left">
-            <img src="../../common/images/shop/1.jpg" alt="">
+            <img src="../../common/images/shop/2.jpg" alt="">
           </div>
           <div class="shop_right">
             <section class="shop_detail_header">
-              <h4 class="shop_title ellipsis">{{"排骨炖豆角"}}</h4>
+              <h4 class="shop_title ellipsis">{{shopList.name}}</h4>
               <ul class="shop_detail_ul">
                 <li class="supports">
                   {{"保"}}
@@ -31,62 +40,18 @@
                   {{}}
                 </div>
                 <div class="order_section">
-                  月售{{10}}单
+                  月售{{shopList.recent_order_num}}单
                 </div>
               </section>
               <section class="shop_rating_order_right">
-                <span class="delivery_style delivery_right">{{"硅谷专送"}}</span>
+                <span class="delivery_style delivery_right">{{shopList.delivery_mode.text}}</span>
               </section>
             </section>
             <section class="shop_distance">
               <p class="shop_delivery_msg">
                 <span>¥{{25}}起送</span>
                 <span class="segmentation">/</span>
-                <span>配送费约¥{{6}}</span>
-              </p>
-            </section>
-          </div>
-        </a>
-      </li>
-      <li class="shop_li">
-        <a>
-          <div class="shop_left">
-            <img src="../../common/images/shop/1.jpg" alt="">
-          </div>
-          <div class="shop_right">
-            <section class="shop_detail_header">
-              <h4 class="shop_title ellipsis">{{"排骨炖豆角"}}</h4>
-              <ul class="shop_detail_ul">
-                <li class="supports">
-                  {{"保"}}
-                </li>
-                <li class="supports">
-                  {{"准"}}
-                </li>
-                <li class="supports">
-                  {{"票"}}
-                </li>
-              </ul>
-            </section>
-            <section class="shop_rating_order">
-              <section class="shop_rating_order_left">
-                <Star score="" :size="24"/>
-                <div class="rating_section">
-                  {{}}
-                </div>
-                <div class="order_section">
-                  月售{{10}}单
-                </div>
-              </section>
-              <section class="shop_rating_order_right">
-                <span class="delivery_style delivery_right">{{"硅谷专送"}}</span>
-              </section>
-            </section>
-            <section class="shop_distance">
-              <p class="shop_delivery_msg">
-                <span>¥{{25}}起送</span>
-                <span class="segmentation">/</span>
-                <span>配送费约¥{{6}}</span>
+                <span>{{shopList.delivery_mode.piecewise_agent_fee}}</span>
               </p>
             </section>
           </div>

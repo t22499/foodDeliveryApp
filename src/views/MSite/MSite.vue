@@ -2,8 +2,13 @@
 import HeaderTop from '@/components/HeaderTop/HeaderTop.vue'
 import ShopList from '@/components/ShopList/ShopList.vue'
 import {reqFoodCategorys} from '@/api/utils'
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { onMounted } from 'vue';
+import {useShopsStore} from '@/stores/shops'
+
+const shopsStore = useShopsStore()
+//位置详情
+const reqAddressList:any = computed(()=>shopsStore.reqAddressList)
 
 //url
 const baseImageUrl = 'https://fuss10.elemecdn.com'
@@ -40,19 +45,19 @@ const foodCategory = async ()=>{
     categoryArr.push(c)
 
   })
-  console.log(foodCategorysArray)
 
 }
 
 onMounted(()=>{
   foodCategory()
+  shopsStore.reqAddressStores()
 })
 </script>
 
 <template>
   <div class="msite">
     <!-- 头部 -->
-    <HeaderTop title="地址">
+    <HeaderTop :title="reqAddressList.name" >
       <template #left>
         <router-link class="header_search" to="/msite">
           <i class="iconfont icon-sousuo"></i>
@@ -68,9 +73,9 @@ onMounted(()=>{
       <!-- 首页 -->
       <!-- 轮播导航 -->
       <nav class="msite_nav">
-        <van-swipe class="my-swipe"  indicator-color="#02a774"  :show-indicators="true">
-          <van-swipe-item class="swiper-item" v-for="(foodCategorysList,index) in foodCategorysArray" :key="index">
-            <a class="link_to_food" href="" v-for=" (category,index) in foodCategorysList" :key="index">
+        <van-swipe class="my-swipe"  indicator-color="#02a774"  :show-indicators="true" v-if="foodCategorysList.length">
+          <van-swipe-item class="swiper-item" v-for="(fcategoryArr,index) in foodCategorysArray" :key="index">
+            <a class="link_to_food" href="" v-for=" (category,index) in fcategoryArr" :key="index">
               <div class="food_container">
                 <img :src="baseImageUrl+category.image_url" alt="">
                 <span>{{ category.title }}</span>
@@ -182,5 +187,4 @@ onMounted(()=>{
   }
 
 }
-
 </style>

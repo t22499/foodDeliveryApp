@@ -1,12 +1,9 @@
 import http from '@/http/http'
 
 // 1、根据经纬度获取位置详情
-export const reqAddress = (geohash:string)=>{
+export const reqAddress = (geohash:any)=>{
   return http({
-    url:'/position',
-    params:{
-      geohash
-    }
+    url:`/position/${geohash}`,
   })
 }
 
