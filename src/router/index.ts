@@ -4,6 +4,7 @@ import Order from '@/views/Order/Order.vue'
 import Profile from '@/views/Profile/Profile.vue'
 import Search from '@/views/Search/Search.vue'
 import Login from '@/views/Login/Login.vue'
+import Shop from '@/views/Shop/Shop.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,6 +44,10 @@ const router = createRouter({
     {
       path:'/login',
       component:Login
+    },
+    {
+      path:'/shop',
+      component:Shop
     }
   ]
 })

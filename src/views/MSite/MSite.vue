@@ -5,6 +5,7 @@ import {reqFoodCategorys} from '@/api/utils'
 import { computed, ref } from 'vue';
 import { onMounted } from 'vue';
 import {useShopsStore} from '@/stores/shops'
+import { showToast } from 'vant';
 
 const shopsStore = useShopsStore()
 //位置详情
@@ -48,6 +49,14 @@ const foodCategory = async ()=>{
 
 }
 
+const loading = ref(false);
+const onRefresh = () => {
+  setTimeout(() => {
+    showToast('刷新成功');
+    loading.value = false;
+  }, 1000);
+};
+
 onMounted(()=>{
   foodCategory()
   shopsStore.reqAddressStores()
@@ -69,31 +78,33 @@ onMounted(()=>{
         </router-link>
       </template>
     </HeaderTop>
+    <van-pull-refresh v-model="loading" @refresh="onRefresh">
     <div class="miste-content-wrapper">
-      <!-- 首页 -->
-      <!-- 轮播导航 -->
-      <nav class="msite_nav">
-        <van-swipe class="my-swipe"  indicator-color="#02a774"  :show-indicators="true" v-if="foodCategorysList.length">
-          <van-swipe-item class="swiper-item" v-for="(fcategoryArr,index) in foodCategorysArray" :key="index">
-            <a class="link_to_food" href="" v-for=" (category,index) in fcategoryArr" :key="index">
-              <div class="food_container">
-                <img :src="baseImageUrl+category.image_url" alt="">
-                <span>{{ category.title }}</span>
-              </div>
-            </a>
-          </van-swipe-item>
-        </van-swipe>
-      </nav>
-      <!--首页附近商家-->
-      <div class="msite_shop_list">
-        <div class="shop_header">
-          <i class="iconfont icon-xuanxiang"></i>
-          <span class="shop_header_title">附近商家</span>
+        <!-- 首页 -->
+        <!-- 轮播导航 -->
+          <nav class="msite_nav">
+            <van-swipe class="my-swipe"  indicator-color="#02a774"  :show-indicators="true" v-if="foodCategorysList.length">
+              <van-swipe-item class="swiper-item" v-for="(fcategoryArr,index) in foodCategorysArray" :key="index">
+                <a class="link_to_food" href="" v-for=" (category,index) in fcategoryArr" :key="index">
+                  <div class="food_container">
+                    <img :src="baseImageUrl+category.image_url" alt="">
+                    <span>{{ category.title }}</span>
+                  </div>
+                </a>
+              </van-swipe-item>
+            </van-swipe>
+          </nav>
+        <!--首页附近商家-->
+        <div class="msite_shop_list">
+          <div class="shop_header">
+            <i class="iconfont icon-xuanxiang"></i>
+            <span class="shop_header_title">附近商家</span>
+          </div>
         </div>
-      </div>
-      <!-- 附件商家内容 -->
-      <ShopList/>
+        <!-- 附件商家内容 -->
+        <ShopList/>
     </div>
+  </van-pull-refresh>
   </div>
 </template>
 
@@ -121,44 +132,50 @@ onMounted(()=>{
   .iconfont{//HeaderTap的组件样式
     font-size: 30px;
   }
-  .msite_nav {//首页
-    @include bottom-border-1px(#e4e4e4);
-    position: relative;
-    height: 200px;
-    margin-top: 45px;
-    background: #fff;
-    overflow: hidden;
-    .my-swipe{//轮播导航样式
-      display: inline-block;
-      width: 100%;
-      height: 100%;
-      color: #fff;
-      text-align: center;
-      .swiper-item{
+  .miste-content-wrapper{
+    // position: fixed;
+    // top: 45px;
+    // bottom: 45px;
+    // width: 100%;
+    .msite_nav {//首页
+      position: relative;
+      @include bottom-border-1px(#e4e4e4);
+      height: 200px;
+      margin-top: 45px;
+      background: #fff;
+      
+      .my-swipe{//轮播导航样式
+        display: inline-block;
         width: 100%;
         height: 100%;
-        display: flex;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        .link_to_food{
-          width: 25%;
-          margin-bottom: 10px;
-          .food_container{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            img{
-              display: inline;
-              width: 50px;
-              height: 50px;
-            }
-            span{
-              display: block;
-              width: 100%;
-              text-align: center;
-              padding-bottom: 10px;
-              margin-top: 10px;
+        color: #fff;
+        text-align: center;
+        .swiper-item{
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: flex-start;
+          flex-wrap: wrap;
+          .link_to_food{
+            width: 25%;
+            margin-bottom: 10px;
+            .food_container{
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-direction: column;
+              img{
+                display: inline;
+                width: 50px;
+                height: 50px;
+              }
+              span{
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding-bottom: 10px;
+                margin-top: 10px;
+              }
             }
           }
         }

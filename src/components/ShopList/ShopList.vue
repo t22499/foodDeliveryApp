@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import {useShopsStore} from '@/stores/shops'
 import { computed, onMounted } from 'vue';
+import Star from '@/components/Star/Star.vue'
 const shopsStore = useShopsStore()
 const reqShopsList:any = computed(()=>shopsStore.reqShopsList)
-console.log(reqShopsList.length)
 
 onMounted(() => {
   shopsStore.reqShopsStores()
@@ -11,9 +11,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="shop_container" >
-    <ul class="shop_list">
-      <li class="shop_li" v-for=" shopList in reqShopsList">
+  <div class="shop_container">
+    <ul class="shop_list" v-if="reqShopsList.length">
+      <li class="shop_li" v-for=" (shopList,index) in reqShopsList" :key="index"
+          @click="$router.push('/shop')">
         <a>
           <div class="shop_left">
             <img src="../../common/images/shop/2.jpg" alt="">
@@ -22,22 +23,16 @@ onMounted(() => {
             <section class="shop_detail_header">
               <h4 class="shop_title ellipsis">{{shopList.name}}</h4>
               <ul class="shop_detail_ul">
-                <li class="supports">
-                  {{"保"}}
-                </li>
-                <li class="supports">
-                  {{"准"}}
-                </li>
-                <li class="supports">
-                  {{"票"}}
+                <li class="supports" v-for="(support, index) in shopList.supports" :key="index">
+                  {{support.icon_name}}
                 </li>
               </ul>
             </section>
             <section class="shop_rating_order">
               <section class="shop_rating_order_left">
-                <Star score="" :size="24"/>
+                <Star :score="shopList.rating" :size="24"/>
                 <div class="rating_section">
-                  {{}}
+                  {{shopList.rating}}
                 </div>
                 <div class="order_section">
                   月售{{shopList.recent_order_num}}单
@@ -49,7 +44,7 @@ onMounted(() => {
             </section>
             <section class="shop_distance">
               <p class="shop_delivery_msg">
-                <span>¥{{25}}起送</span>
+                <span>¥{{shopList.float_minimum_order_amount}}起送</span>
                 <span class="segmentation">/</span>
                 <span>{{shopList.delivery_mode.piecewise_agent_fee}}</span>
               </p>

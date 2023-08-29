@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useRoute } from 'vue-router';
 import FooterGuide from './components/FooterGuide/FooterGuide.vue'
 
 </script>
