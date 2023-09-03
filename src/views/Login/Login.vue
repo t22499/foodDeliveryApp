@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-const loginWay = ref(true);
+const loginWay = ref(true);// true代表短信登陆, false代表密码
+
+
 </script>
 
 <template>

@@ -85,3 +85,29 @@ export const reqLogout = ()=>{
   })
 }
 
+/**
+ * 获取商家信息
+ */
+export const reqShopInfo = ()=>{
+  return http({
+    url:'/info',
+  })
+}
+
+/**
+ * 获取商家评价数组
+ */
+export const reqShopRatings = ()=>{
+  return http({
+    url:'/ratings',
+  })
+}
+
+/**
+ * 获取商家商品数组
+ */
+export const reqShopGoods = ()=>{
+  return http({
+    url:'/goods',
+  })
+}

@@ -1,16 +1,31 @@
 <script setup lang="ts">
-  
+import { onMounted, ref } from 'vue';
+import {reqShopInfo} from '@/api/utils'
+
+//url
+const baseImageUrl = 'https://fuss10.elemecdn.com'
+//获取商家信息
+const shopInfoList = ref({})
+
+const shopInfo = async () => {
+  const res = await reqShopInfo()
+  shopInfoList.value = res
+}
+
+onMounted(() => {
+  shopInfo()
+})
 </script>
 
 <template>
   <div class="shop-header">
     <nav class="shop-nav">
-      <a class="back" >
+      <a class="back" href="">
         <i class="iconfont icon-arrow_left"></i>
       </a>
     </nav>
     <div class="shop-content" >
-      <img class="content-image" >
+      <img class="content-image">
       <div class="header-content">
         <h2 class="content-title">
           <span class="content-tag">
