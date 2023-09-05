@@ -5,7 +5,6 @@ const router = useRouter()
 const goTo = (path:string)=>{
   router.replace(path)
 }
-console.log(route.meta.showFooter)
 
 </script>
 

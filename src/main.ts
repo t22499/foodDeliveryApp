@@ -8,6 +8,7 @@ import { createPinia } from 'pinia'
 import { Swipe, SwipeItem, PullRefresh} from 'vant'
 import { Icon } from 'vant'
 import 'vant/lib/index.css';
+import  '../src/mock/mockServer.js';
 
 import App from './App.vue'
 import router from './router'

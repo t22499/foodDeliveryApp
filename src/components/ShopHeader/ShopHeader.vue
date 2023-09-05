@@ -5,11 +5,12 @@ import {reqShopInfo} from '@/api/utils'
 //url
 const baseImageUrl = 'https://fuss10.elemecdn.com'
 //获取商家信息
-const shopInfoList = ref({})
+const shopInfoList:any = ref({})
 
 const shopInfo = async () => {
   const res = await reqShopInfo()
-  shopInfoList.value = res
+  shopInfoList.value = res.data
+  console.log(res)
 }
 
 onMounted(() => {
@@ -19,34 +20,34 @@ onMounted(() => {
 
 <template>
   <div class="shop-header">
-    <nav class="shop-nav">
-      <a class="back" href="">
-        <i class="iconfont icon-arrow_left"></i>
+    <nav class="shop-nav" :style="{background: `url(${shopInfoList.bgImg})`}">
+      <a class="back" href="/">
+        <i class="iconfont icon-jiantou1"></i>
       </a>
     </nav>
     <div class="shop-content" >
-      <img class="content-image">
+      <img class="content-image" :src="shopInfoList.avatar">
       <div class="header-content">
         <h2 class="content-title">
           <span class="content-tag">
             <span class="mini-tag">品牌</span>
           </span>
-          <span class="content-name">{{}}</span>
+          <span class="content-name">{{shopInfoList.name}}</span>
           <i class="content-icon"></i>
         </h2>
         <div class="shop-message">
-          <span class="shop-message-detail">{{}}</span>
-          <span class="shop-message-detail">月售{{}}单</span>
+          <span class="shop-message-detail">{{shopInfoList.score}}</span>
+          <span class="shop-message-detail">月售{{shopInfoList.sellCount}}单</span>
           <span class="shop-message-detail">
-            {{}}
-            <span>约{{}}分钟</span>
+            {{shopInfoList.description}}
+            <span>约{{shopInfoList.deliveryTime}}分钟</span>
           </span>
-          <span class="shop-message-detail">距离{{}}</span>
+          <span class="shop-message-detail">距离{{shopInfoList.distance}}</span>
         </div>
       </div>
     </div>
 
-    <div class="shop-header-discounts">
+    <!-- <div class="shop-header-discounts">
       <div class="discounts-left">
         <div class="activity" >
           <span class="content-tag">
@@ -123,7 +124,7 @@ onMounted(() => {
         </div>
         <div class="activity-sheet-cover"></div>
       </div>
-    </transition>
+    </transition> -->
   </div>
 </template>
 
@@ -157,7 +158,7 @@ onMounted(() => {
       position: absolute;
       top: 10px;
 
-      .icon-arrow_left {
+      .icon-jiantou1 {
         display: block;
         padding: 5px;
         font-size: 20px;
