@@ -5,7 +5,7 @@ import '@/common/style/font_tubiao/iconfont.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { Swipe, SwipeItem, PullRefresh} from 'vant'
+import { Swipe, SwipeItem, Sidebar, SidebarItem, PullRefresh} from 'vant'
 import { Icon } from 'vant'
 import 'vant/lib/index.css';
 import  '../src/mock/mockServer.js';
@@ -18,6 +18,8 @@ app.use(Icon)
 app.use(Swipe)
 app.use(SwipeItem)
 app.use(PullRefresh);
+app.use(Sidebar)
+app.use(SidebarItem)
 app.use(createPinia())
 app.use(router)
 

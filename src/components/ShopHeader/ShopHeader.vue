@@ -10,7 +10,6 @@ const shopInfoList:any = ref({})
 const shopInfo = async () => {
   const res = await reqShopInfo()
   shopInfoList.value = res.data
-  console.log(res)
 }
 
 onMounted(() => {
@@ -46,85 +45,6 @@ onMounted(() => {
         </div>
       </div>
     </div>
-
-    <!-- <div class="shop-header-discounts">
-      <div class="discounts-left">
-        <div class="activity" >
-          <span class="content-tag">
-            <span class="mini-tag">{{}}</span>
-          </span>
-          <span class="activity-content ellipsis">{{}}</span>
-        </div>
-      </div>
-      <div class="discounts-right">
-        {{}}个优惠
-      </div>
-    </div>
-
-    <transition name="fade">
-      <div class="shop-brief-modal" >
-        <div class="brief-modal-content">
-          <h2 class="content-title">
-          <span class="content-tag">
-            <span class="mini-tag">品牌</span>
-          </span>
-            <span class="content-name">{{}}</span>
-          </h2>
-          <ul class="brief-modal-msg">
-            <li>
-              <h3>{{}}</h3>
-              <p>评分</p>
-            </li>
-            <li>
-              <h3>{{}}单</h3>
-              <p>月售</p>
-            </li>
-            <li>
-              <h3>{{}}</h3>
-              <p>约{{}}分钟</p>
-            </li>
-            <li>
-              <h3>{{}}元</h3>
-              <p>配送费用</p>
-            </li>
-            <li>
-              <h3>{{}}</h3>
-              <p>距离</p>
-            </li>
-          </ul>
-          <h3 class="brief-modal-title">
-            <span>公告</span>
-          </h3>
-          <div class="brief-modal-notice">
-            {{}}
-          </div>
-          <div class="mask-footer">
-            <span class="iconfont icon-close"></span>
-          </div>
-        </div>
-        <div class="brief-modal-cover"></div>
-      </div>
-    </transition>
-
-    <transition name="fade">
-      <div class="activity-sheet" >
-        <div class="activity-sheet-content">
-          <h2 class="activity-sheet-title">优惠活动</h2>
-          <ul class="list">
-            <li class="activity-item">
-            <span class="content-tag">
-                <span class="mini-tag">{{}}</span>
-              </span>
-              <span class="activity-content">{{}}</span>
-            </li>
-          </ul>
-          <div class="activity-sheet-close" >
-            <span class="iconfont icon-close"></span>
-          </div>
-        </div>
-        <div class="activity-sheet-cover"></div>
-      </div>
-    </transition> -->
   </div>
 </template>
 
