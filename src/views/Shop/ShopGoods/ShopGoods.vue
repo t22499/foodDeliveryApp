@@ -16,7 +16,6 @@ const clickMenuItem = (index:any)=>{
 
 //goods表
 const shopGoodsList:any = computed(()=>shopsStore.reqShopGoodsList)
-// console.log(shopGoodsList)
 
 onMounted(() => {
   shopsStore.reqShopGoodsStores()
@@ -37,7 +36,7 @@ onMounted(() => {
       </ul>
     </div>
     <div class="foods-wrapper">
-      <ul>
+      <ul >
         <li class="food-list-hook" v-for="(goods,index) in shopGoodsList" :key="index">
           <h1 class="title">{{ goods.name }}</h1>
           <ul>

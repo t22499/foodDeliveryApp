@@ -14,7 +14,6 @@ const foodCount = (isAdd:any)=>{
   shopsStore.reqFoodCount({isAdd,food:props.food})
 }
 
-console.log(props.food)
 </script>
 
 <template>

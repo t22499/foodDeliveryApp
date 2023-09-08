@@ -14,7 +14,7 @@ onMounted(() => {
   <div class="shop_container">
     <ul class="shop_list" v-if="reqShopsList.length">
       <li class="shop_li" v-for=" (shopList,index) in reqShopsList" :key="index"
-          @click="$router.push('/shop')">
+           @click="$router.push('/shop')">
         <a>
           <div class="shop_left">
             <img src="../../common/images/shop/2.jpg" alt="">

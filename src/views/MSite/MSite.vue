@@ -2,14 +2,17 @@
 import HeaderTop from '@/components/HeaderTop/HeaderTop.vue'
 import ShopList from '@/components/ShopList/ShopList.vue'
 import {reqFoodCategorys} from '@/api/utils'
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { onMounted } from 'vue';
 import {useShopsStore} from '@/stores/shops'
-import { showToast } from 'vant';
+import BScroll from '@better-scroll/core'
 
 const shopsStore = useShopsStore()
+
 //位置详情
 const reqAddressList:any = computed(()=>shopsStore.reqAddressList)
+//商品列表
+const reqShopsList:any = computed(()=>shopsStore.reqShopsList)
 
 //url
 const baseImageUrl = 'https://fuss10.elemecdn.com'
@@ -21,7 +24,6 @@ const foodCategorysList:any = ref({})
 const foodCategorysArray:any = []
 //定义一个小数组长度为8
 let categoryArr:any = []
-
 
 //获取菜单种类列表
 const foodCategory = async ()=>{
@@ -49,17 +51,21 @@ const foodCategory = async ()=>{
 
 }
 
-const loading = ref(false);
-const onRefresh = () => {
-  setTimeout(() => {
-    showToast('刷新成功');
-    loading.value = false;
-  }, 1000);
-};
+const scroll:any = ref(null)
+//动态监听
+watch([reqAddressList,foodCategorysList,reqShopsList],(newVal,oldVal)=>{
+  // console.log(newVal)
+  new BScroll(scroll.value,{
+    probeType: 3,
+    pullUpLoad: true
+  })
+})
+  
 
 onMounted(()=>{
   foodCategory()
   shopsStore.reqAddressStores()
+ 
 })
 </script>
 
@@ -78,8 +84,8 @@ onMounted(()=>{
         </router-link>
       </template>
     </HeaderTop>
-    <van-pull-refresh v-model="loading" @refresh="onRefresh">
-    <div class="miste-content-wrapper">
+    <div class="miste-content-wrapper" ref="scroll">
+      <div class="miste-content">
         <!-- 首页 -->
         <!-- 轮播导航 -->
           <nav class="msite_nav">
@@ -103,8 +109,8 @@ onMounted(()=>{
         </div>
         <!-- 附件商家内容 -->
         <ShopList/>
+      </div>
     </div>
-  </van-pull-refresh>
   </div>
 </template>
 
@@ -133,15 +139,14 @@ onMounted(()=>{
     font-size: 30px;
   }
   .miste-content-wrapper{
-    // position: fixed;
-    // top: 45px;
-    // bottom: 45px;
-    // width: 100%;
+    position: fixed;
+    top: 45px;
+    bottom: 45px;
+    width: 100%;
     .msite_nav {//首页
       position: relative;
       @include bottom-border-1px(#e4e4e4);
       height: 200px;
-      margin-top: 45px;
       background: #fff;
       
       .my-swipe{//轮播导航样式

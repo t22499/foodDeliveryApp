@@ -60,15 +60,14 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
       //是否第一次增加
       if(!food.count){
         Reflect.set(food, 'count', 1)
-        // foodList.value.push(food)
-        console.log("增加总数")
       }else{
         food.count++
       }
-      // console.log(reqShopGoodsList.value)
     }else{
-      if(food.count){
-        
+      if(food.count === 1){
+        Reflect.deleteProperty(food,'count')
+      }else{
+        food.count--
       }
     }
   }
