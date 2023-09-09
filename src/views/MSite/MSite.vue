@@ -2,7 +2,7 @@
 import HeaderTop from '@/components/HeaderTop/HeaderTop.vue'
 import ShopList from '@/components/ShopList/ShopList.vue'
 import {reqFoodCategorys} from '@/api/utils'
-import { computed, ref, watch } from 'vue';
+import { computed, onUpdated, ref, watch } from 'vue';
 import { onMounted } from 'vue';
 import {useShopsStore} from '@/stores/shops'
 import BScroll from '@better-scroll/core'
@@ -52,15 +52,13 @@ const foodCategory = async ()=>{
 }
 
 const scroll:any = ref(null)
-//动态监听
-watch([reqAddressList,foodCategorysList,reqShopsList],(newVal,oldVal)=>{
-  // console.log(newVal)
+onUpdated(() => {
   new BScroll(scroll.value,{
     probeType: 3,
-    pullUpLoad: true
+    pullUpLoad: true,
+    click:true
   })
-})
-  
+}),
 
 onMounted(()=>{
   foodCategory()

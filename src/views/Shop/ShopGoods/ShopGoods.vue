@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {useShopsStore} from '@/stores/shops'
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { computed, onMounted } from 'vue';
 import CartControl from '@/components/CartControl/CartControl.vue'
+import BScroll from '@better-scroll/core'
 
 const shopsStore = useShopsStore()
 
@@ -17,8 +18,25 @@ const clickMenuItem = (index:any)=>{
 //goods表
 const shopGoodsList:any = computed(()=>shopsStore.reqShopGoodsList)
 
+
+const scroll:any = ref(null)
+//动态监听
+watch(shopGoodsList,(newVal,oldVal)=>{
+  console.log(newVal)
+})
+  
+setTimeout(()=>{
+  new BScroll(scroll.value,{
+    probeType: 3,
+    pullUpLoad: true,
+    click:true
+  })
+},2000)
+
 onMounted(() => {
+  console.log(shopGoodsList)
   shopsStore.reqShopGoodsStores()
+  
 })
 </script>
 
@@ -35,34 +53,38 @@ onMounted(() => {
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
-      <ul >
-        <li class="food-list-hook" v-for="(goods,index) in shopGoodsList" :key="index">
-          <h1 class="title">{{ goods.name }}</h1>
-          <ul>
-            <li class="food-item" v-for="(food,index) in goods.foods" :key="index">
-              <div class="icon">
-                <img width="57" height="57" :src="food.icon">
-              </div>
-              <div class="content">
-                <h2 class="name">{{food.name}}</h2>
-                  <p class="desc">{{food.description}}</p>
-                  <div class="extra">
-                    <span class="count">月售{{food.sellCount}}份</span>
-                    <span>好评率{{food.rating}}%</span>
+    <div class="core-container">
+      <div class="scroll-wrapper" ref="scroll">
+        <div class="scroll-content">
+          <ul class="foods-wrapper-ul">
+            <li class="food-list-hook" v-for="(goods,index) in shopGoodsList" :key="index">
+              <h1 class="title">{{ goods.name }}</h1>
+              <ul>
+                <li class="food-item" v-for="(food,index) in goods.foods" :key="index">
+                  <div class="icon">
+                    <img width="57" height="57" :src="food.icon">
                   </div>
-                  <div class="price">
-                    <span class="now">￥{{food.price}}</span>
-                    <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
-                    <div class="cartcontrol-wrapper">
-                      <CartControl :food="food"/>
-                    </div>
+                  <div class="content">
+                    <h2 class="name">{{food.name}}</h2>
+                      <p class="desc">{{food.description}}</p>
+                      <div class="extra">
+                        <span class="count">月售{{food.sellCount}}份</span>
+                        <span>好评率{{food.rating}}%</span>
+                      </div>
+                      <div class="price">
+                        <span class="now">￥{{food.price}}</span>
+                        <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
+                        <div class="cartcontrol-wrapper">
+                          <CartControl :food="food"/>
+                        </div>
+                      </div>
                   </div>
-              </div>
+                </li>
+              </ul>
             </li>
           </ul>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -71,8 +93,9 @@ onMounted(() => {
 @import '../../../common/style/mixins.scss';
 .goods {
   display: flex;
-  position: relative;
+  position: absolute;
   width: 100%;
+  height: 79%;
   overflow: hidden;
   background-color: #fff;
   .menu-wrapper{
@@ -110,63 +133,70 @@ onMounted(() => {
     }
   }
 
-  .foods-wrapper{
+  .core-container{
     flex: 1;
-    .food-list-hook{
-      .title{
-        padding-left: 14px;
-        height: 26px;
-        line-height: 26px;
-        border-left: 2px solid #d9dde1;
-        font-size: 12px;
-        color: #93999f;
-        background: #f3f5f7;
+    .scroll-wrapper{
+      position: relative;
+       height: 100%;
+       overflow: hidden;
+       .foods-wrapper-ul{
+        .food-list-hook{
+          .title{
+            padding-left: 14px;
+            height: 26px;
+            line-height: 26px;
+            border-left: 2px solid #d9dde1;
+            font-size: 12px;
+            color: #93999f;
+            background: #f3f5f7;
 
-      }
-      .food-item{
-        @include bottom-border-1px(#d9d9d9);
-        display: flex;
-        margin: 18px;
-        padding-bottom: 18px;
-        position: relative;
-        border: none;
-        .icon{
-          margin-right: 10px;
-        }
-        .content{
-          flex: 1;
-          .name{
-            margin: 2px 0 8px 0;
-            height: 14px;
-            line-height: 14px;
-            font-size: 14px;
-            color: #07111b;
           }
-          .desc{
-            line-height: 12px;
-            margin-bottom: 8px;
-            font-size: 10px;
-            color: #93999f;
-          }
-          .extra{
-            line-height: 10px;
-            font-size: 10px;
-            color: #93999f;
-            .count{
-              margin-right: 12px;
+          .food-item{
+            @include bottom-border-1px(#d9d9d9);
+            display: flex;
+            margin: 18px;
+            padding-bottom: 18px;
+            position: relative;
+            border: none;
+            .icon{
+              margin-right: 10px;
             }
-          }
-          .price{
-            .now{
-              margin-right: 8px;
-              font-size: 14px;
-              color: #f01414;
+            .content{
+              flex: 1;
+              .name{
+                margin: 2px 0 8px 0;
+                height: 14px;
+                line-height: 14px;
+                font-size: 14px;
+                color: #07111b;
+              }
+              .desc{
+                line-height: 12px;
+                margin-bottom: 8px;
+                font-size: 10px;
+                color: #93999f;
+              }
+              .extra{
+                line-height: 10px;
+                font-size: 10px;
+                color: #93999f;
+                .count{
+                  margin-right: 12px;
+                }
+              }
+              .price{
+                .now{
+                  margin-right: 8px;
+                  font-size: 14px;
+                  color: #f01414;
+                }
+                .cartcontrol-wrapper{
+                  position: absolute;
+                  right: 0;
+                  bottom: 12px;
+                }  
+              }
             }
-          .cartcontrol-wrapper{
-            position: absolute;
-            right: 0;
-            bottom: 12px;
-          }  
           }
         }
       }
