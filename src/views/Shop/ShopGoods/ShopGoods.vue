@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useShopsStore} from '@/stores/shops'
-import { ref, watch } from 'vue';
+import { onUpdated, ref, watch } from 'vue';
 import { computed, onMounted } from 'vue';
 import CartControl from '@/components/CartControl/CartControl.vue'
 import BScroll from '@better-scroll/core'
@@ -25,13 +25,14 @@ watch(shopGoodsList,(newVal,oldVal)=>{
   console.log(newVal)
 })
   
-setTimeout(()=>{
+//组件加载完成就执行
+onUpdated(() => {
   new BScroll(scroll.value,{
     probeType: 3,
     pullUpLoad: true,
     click:true
   })
-},2000)
+}),
 
 onMounted(() => {
   console.log(shopGoodsList)
