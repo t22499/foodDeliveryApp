@@ -61,6 +61,7 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
       if(!food.count){
         Reflect.set(food, 'count', 1)
       }else{
+        // debugger
         food.count++
       }
     }else{

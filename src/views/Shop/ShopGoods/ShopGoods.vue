@@ -1,43 +1,78 @@
 <script setup lang="ts">
 import {useShopsStore} from '@/stores/shops'
-import { onUpdated, ref, watch } from 'vue';
+import { onUpdated, ref } from 'vue';
 import { computed, onMounted } from 'vue';
 import CartControl from '@/components/CartControl/CartControl.vue'
 import BScroll from '@better-scroll/core'
 
 const shopsStore = useShopsStore()
 
-//current显示状态
-const currentIndex = ref(0)
-
-//current切换状态
-const clickMenuItem = (index:any)=>{
-  currentIndex.value = index
-}
-
 //goods表
 const shopGoodsList:any = computed(()=>shopsStore.reqShopGoodsList)
 
-
+const foodsTitle:any = ref(null)
 const scroll:any = ref(null)
-//动态监听
-watch(shopGoodsList,(newVal,oldVal)=>{
-  console.log(newVal)
+let tops:any = [0]
+let top = 0
+let scrollY:any = 0//滑动的距离
+let foodScroll:any = null//BScroll实例对象
+let scrollState = 1//只进去一次
+
+//current显示状态
+const currentIndex = ref(0)
+//current点击切换状态
+const clickMenuItem = (index:any)=>{
+  currentIndex.value = index
+
+  //根据index到对应的位置
+  scrollY = tops[index]
+  foodScroll.scrollTo(0, -scrollY, 300)
+}
+
+
+//根据移动距离改变左侧列表
+const ChangeList = (Y:any)=>{
+  for(let i = 0;i < tops.length;i++){
+    if(Y >= tops[i]){
+      currentIndex.value = i
+    }
+  }
+}
+
+//获取元素的高度
+const _initTops = ()=>{
+  const liHeight = foodsTitle.value.getElementsByClassName('food-list-hook')
+  Array.prototype.slice.call(liHeight).forEach(li =>{
+    top += li.clientHeight
+    tops.push(top)
+  })
+}
+
+//引入滚动插件
+const _initScroll = ()=>{
+  foodScroll = new BScroll(scroll.value,{
+    probeType: 3,
+    click:true,
+    freeScroll:true
+  })
+
+  // 给右侧列表绑定scroll结束的监听
+  foodScroll.on('scrollEnd', ({x, y}:{x:any,y:any}) => {
+    scrollY = Math.abs(y)
+    ChangeList(scrollY)
+  })
+}
+
+onUpdated(()=>{
+  if(scrollState === 1){
+    _initScroll()//引入滚动插件
+    _initTops()//获取元素的高度
+    scrollState++
+  }
 })
   
-//组件加载完成就执行
-onUpdated(() => {
-  new BScroll(scroll.value,{
-    probeType: 3,
-    pullUpLoad: true,
-    click:true
-  })
-}),
-
 onMounted(() => {
-  console.log(shopGoodsList)
   shopsStore.reqShopGoodsStores()
-  
 })
 </script>
 
@@ -57,7 +92,7 @@ onMounted(() => {
     <div class="core-container">
       <div class="scroll-wrapper" ref="scroll">
         <div class="scroll-content">
-          <ul class="foods-wrapper-ul">
+          <ul class="foods-wrapper-ul" ref="foodsTitle">
             <li class="food-list-hook" v-for="(goods,index) in shopGoodsList" :key="index">
               <h1 class="title">{{ goods.name }}</h1>
               <ul>
