@@ -6,7 +6,7 @@ import {
   reqShopRatings,
   reqShopInfo
   } from '@/api/utils'
-import { ref } from 'vue'
+import { ref ,computed } from 'vue'
 
 export const useShopsStore = defineStore('ShopsStore',()=>{
   let latitude:string = '40.10038'// 纬度
@@ -45,16 +45,15 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
   }
 
   //获取商品Goods表
-  const reqShopGoodsList = ref({})
+  const reqShopGoodsList:any = ref([])
   const reqShopGoodsStores = async ()=>{
     const res = await reqShopGoods()
     reqShopGoodsList.value = res.data
   }
 
-  //存放food
-  // const foodList:any = ref([])
   //food的数量的增加
   const reqFoodCount = ({isAdd,food}:{isAdd:any,food:any})=>{
+    // console.log(reqShopGoodsList)
     //判断是否增加
     if(isAdd){
       //是否第一次增加
@@ -73,7 +72,56 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
     }
   }
 
+  // 计算总数量
+  const totalQuantity = computed(() => {
+    let quantity = 0;
+    for (const good of reqShopGoodsList.value) {
+      for (const food of good.foods) {
+        if(food.count){
+          quantity += food.count; // 假设菜品数量存储在quantity属性中
+        }
+      }
+    }
+    return quantity;
+  });
 
+  // 计算总价格
+  const totalPrice = computed(() => {
+    let price = 0;
+    for (const good of reqShopGoodsList.value) {
+      for (const food of good.foods) {
+        if(food.count){
+          price += food.count * food.price; // 假设菜品价格存储在price属性中
+        }
+      }
+    }
+    return price;
+  });
+
+  //购物车食物列表
+  const shoppingCartList = computed(() => {
+    let shoppingCart = [];
+    for (const good of reqShopGoodsList.value) {
+      for (const food of good.foods) {
+        if(food.count){
+          shoppingCart.push(food)
+        }
+      }
+    }
+    return shoppingCart;
+  })
+
+
+   //清空foodList
+   const clearList = ()=>{ 
+    for (const good of reqShopGoodsList.value) {
+      for (const food of good.foods) {
+        if(food.count){
+          Reflect.deleteProperty(food,'count')
+        }
+      }
+    }
+  }
   
   return{
     latitude,// 纬度
@@ -89,6 +137,9 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
     reqShopRatingsList,//商品Ratings表
     reqShopRatingsStores,//获取商品Ratings表
     reqFoodCount,//food的数量的增加
+    totalQuantity,// 计算总数量
+    totalPrice,// 计算总价格
+    clearList,//清空foodList
+    shoppingCartList//购物车食物列表
   }
-  
 })

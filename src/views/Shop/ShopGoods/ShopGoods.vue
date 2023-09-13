@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import CartControl from '@/components/CartControl/CartControl.vue'
+import Food from '@/components/Food/Food.vue'
+
 import {useShopsStore} from '@/stores/shops'
 import { onUpdated, ref } from 'vue';
 import { computed, onMounted } from 'vue';
-import CartControl from '@/components/CartControl/CartControl.vue'
 import BScroll from '@better-scroll/core'
 
 const shopsStore = useShopsStore()
@@ -12,14 +14,18 @@ const shopGoodsList:any = computed(()=>shopsStore.reqShopGoodsList)
 
 const foodsTitle:any = ref(null)
 const scroll:any = ref(null)
+const wrapperScroll:any = ref(null)
 let tops:any = [0]
 let top = 0
 let scrollY:any = 0//滑动的距离
 let foodScroll:any = null//BScroll实例对象
 let scrollState = 1//只进去一次
+const currentIndex = ref(0)//current显示状态
 
-//current显示状态
-const currentIndex = ref(0)
+// const foodCount = (food:any)=>{
+//   shopsStore.foodCount(food)
+// }
+
 //current点击切换状态
 const clickMenuItem = (index:any)=>{
   currentIndex.value = index
@@ -56,6 +62,12 @@ const _initScroll = ()=>{
     freeScroll:true
   })
 
+  new BScroll(wrapperScroll.value,{
+    probeType: 3,
+    click:true,
+    freeScroll:true
+  })
+
   // 给右侧列表绑定scroll结束的监听
   foodScroll.on('scrollEnd', ({x, y}:{x:any,y:any}) => {
     scrollY = Math.abs(y)
@@ -77,51 +89,55 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="goods">
-    <div class="menu-wrapper">
-      <ul>
-        <li class="menu-item " v-for="(goods,index) in shopGoodsList" :key="index"
-        :class="{current : currentIndex === index}" @click="clickMenuItem(index)">
-          <span class="text bottom-border-1px">
-            <img class="icon" :src="goods.icon" v-if="goods.icon">
-            {{goods.name}}
-          </span>
-        </li>
-      </ul>
-    </div>
-    <div class="core-container">
-      <div class="scroll-wrapper" ref="scroll">
-        <div class="scroll-content">
-          <ul class="foods-wrapper-ul" ref="foodsTitle">
-            <li class="food-list-hook" v-for="(goods,index) in shopGoodsList" :key="index">
-              <h1 class="title">{{ goods.name }}</h1>
-              <ul>
-                <li class="food-item" v-for="(food,index) in goods.foods" :key="index">
-                  <div class="icon">
-                    <img width="57" height="57" :src="food.icon">
-                  </div>
-                  <div class="content">
-                    <h2 class="name">{{food.name}}</h2>
-                      <p class="desc">{{food.description}}</p>
-                      <div class="extra">
-                        <span class="count">月售{{food.sellCount}}份</span>
-                        <span>好评率{{food.rating}}%</span>
-                      </div>
-                      <div class="price">
-                        <span class="now">￥{{food.price}}</span>
-                        <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
-                        <div class="cartcontrol-wrapper">
-                          <CartControl :food="food"/>
+  <div>
+    <div class="goods">
+      <div class="menu-wrapper" ref="wrapperScroll">
+        <ul>
+          <li class="menu-item " v-for="(goods,index) in shopGoodsList" :key="index"
+          :class="{current : currentIndex === index}" @click="clickMenuItem(index)">
+            <span class="text bottom-border-1px">
+              <img class="icon" :src="goods.icon" v-if="goods.icon">
+              {{goods.name}}
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="core-container">
+        <div class="scroll-wrapper" ref="scroll">
+          <div class="scroll-content">
+            <ul class="foods-wrapper-ul" ref="foodsTitle">
+              <li class="food-list-hook" v-for="(goods,index) in shopGoodsList" :key="index">
+                <h1 class="title">{{ goods.name }}</h1>
+                <ul>
+                  <li class="food-item" v-for="(food,index) in goods.foods" 
+                  :key="index">
+                    <div class="icon">
+                      <img width="57" height="57" :src="food.icon">
+                    </div>
+                    <div class="content">
+                      <h2 class="name">{{food.name}}</h2>
+                        <p class="desc">{{food.description}}</p>
+                        <div class="extra">
+                          <span class="count">月售{{food.sellCount}}份</span>
+                          <span>好评率{{food.rating}}%</span>
                         </div>
-                      </div>
-                  </div>
-                </li>
-              </ul>
-            </li>
-          </ul>
+                        <div class="price">
+                          <span class="now">￥{{food.price}}</span>
+                          <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
+                          <div class="cartcontrol-wrapper">
+                            <CartControl :food="food"/>
+                          </div>
+                        </div>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
+    <Food></Food>
   </div>
 </template>
 
@@ -131,9 +147,10 @@ onMounted(() => {
   display: flex;
   position: absolute;
   width: 100%;
-  height: 79%;
   overflow: hidden;
   background-color: #fff;
+  top: 183px;
+  bottom: 46px;
   .menu-wrapper{
     background-color: #f3f5f7;
     width: 80px;
@@ -172,7 +189,6 @@ onMounted(() => {
   .core-container{
     flex: 1;
     .scroll-wrapper{
-      position: relative;
        height: 100%;
        overflow: hidden;
        .foods-wrapper-ul{
