@@ -22,10 +22,6 @@ let foodScroll:any = null//BScroll实例对象
 let scrollState = 1//只进去一次
 const currentIndex = ref(0)//current显示状态
 
-// const foodCount = (food:any)=>{
-//   shopsStore.foodCount(food)
-// }
-
 //current点击切换状态
 const clickMenuItem = (index:any)=>{
   currentIndex.value = index
@@ -90,8 +86,8 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="goods">
-      <div class="menu-wrapper" ref="wrapperScroll">
+    <div class="goods" ref="wrapperScroll">
+      <div class="menu-wrapper">
         <ul>
           <li class="menu-item " v-for="(goods,index) in shopGoodsList" :key="index"
           :class="{current : currentIndex === index}" @click="clickMenuItem(index)">
