@@ -3,15 +3,20 @@ import {useShopsStore} from '@/stores/shops'
 
 const shopsStore = useShopsStore()
 
+
 //接收食物列表
 const props:any = defineProps({
   food: Object
 });
 
 
+
 //增加食物数量
 const foodCount = (isAdd:any)=>{
   shopsStore.reqFoodCount({isAdd,food:props.food})
+  setTimeout(() => {
+    shopsStore.reqControlFoodCount()
+  }, 0);
 }
 
 </script>

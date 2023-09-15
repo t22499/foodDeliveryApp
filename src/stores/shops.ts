@@ -31,14 +31,14 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
 
 
   //获取商品info表
-  const reqShopInfoList = ref({})
+  const reqShopInfoList = ref([])
   const reqShopInfoStores = async ()=>{
     const res = await reqShopInfo()
     reqShopInfoList.value = res.data
   }
 
   //获取商品Ratings表
-  const reqShopRatingsList = ref({})
+  const reqShopRatingsList = ref([])
   const reqShopRatingsStores = async ()=>{
     const res = await reqShopRatings()
     reqShopRatingsList.value = res.data
@@ -51,25 +51,32 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
     reqShopGoodsList.value = res.data
   }
 
+  //控制reqFoodCount只执行一次
+  let controlFoodCount = ref(0)
+  const reqControlFoodCount = ()=>{
+    controlFoodCount.value = 0
+  }
   //food的数量的增加
   const reqFoodCount = ({isAdd,food}:{isAdd:any,food:any})=>{
-    // console.log(reqShopGoodsList)
-    //判断是否增加
-    if(isAdd){
-      //是否第一次增加
-      if(!food.count){
-        Reflect.set(food, 'count', 1)
+    if(controlFoodCount.value === 0){
+      //判断是否增加
+      if(isAdd){
+        console.log("c")
+        //是否第一次增加
+        if(!food.count){
+          Reflect.set(food, 'count', 1)
+        }else{
+          food.count++
+        }
       }else{
-        // debugger
-        food.count++
-      }
-    }else{
-      if(food.count === 1){
-        Reflect.deleteProperty(food,'count')
-      }else{
-        food.count--
+        if(food.count === 1){
+          Reflect.deleteProperty(food,'count')
+        }else{
+          food.count--
+        }
       }
     }
+    controlFoodCount.value += 1
   }
 
   // 计算总数量
@@ -111,6 +118,16 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
     return shoppingCart;
   })
 
+  // 好评数量
+  const positiveSize = computed(()=>{
+    let ratings:any = []
+    let preTotal:any = 0
+    for(const rating of reqShopRatingsList.value){
+      ratings.push(rating)
+    }
+    return ratings.reduce((preTotal:any, rating:any)=> preTotal + (rating.rateType===0?1:0) , 0)
+  })
+
 
    //清空foodList
    const clearList = ()=>{ 
@@ -122,7 +139,7 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
       }
     }
   }
-  
+
   return{
     latitude,// 纬度
     longitude,// 经度
@@ -140,6 +157,9 @@ export const useShopsStore = defineStore('ShopsStore',()=>{
     totalQuantity,// 计算总数量
     totalPrice,// 计算总价格
     clearList,//清空foodList
-    shoppingCartList//购物车食物列表
+    shoppingCartList,//购物车食物列表
+    controlFoodCount,//控制reqFoodCount只执行一次
+    reqControlFoodCount,//控制reqFoodCount只执行一次
+    positiveSize, // 好评数量
   }
 })

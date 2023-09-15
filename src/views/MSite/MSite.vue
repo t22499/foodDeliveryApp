@@ -91,7 +91,7 @@ onMounted(()=>{
           <nav class="msite_nav">
             <van-swipe class="my-swipe"  indicator-color="#02a774"  :show-indicators="true" v-if="foodCategorysList.length">
               <van-swipe-item class="swiper-item" v-for="(fcategoryArr,index) in foodCategorysArray" :key="index">
-                <a class="link_to_food" href="" v-for=" (category,index) in fcategoryArr" :key="index">
+                <a class="link_to_food" href="script:;" v-for=" (category,index) in fcategoryArr" :key="index">
                   <div class="food_container">
                     <img :src="baseImageUrl+category.image_url" alt="">
                     <span>{{ category.title }}</span>
