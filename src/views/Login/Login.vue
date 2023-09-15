@@ -2,7 +2,20 @@
 import { ref } from 'vue';
 
 const loginWay = ref(true);// true代表短信登陆, false代表密码
+const computeTime = ref(0)//倒计时
 
+const getCode = ()=>{
+  // 如果当前没有计时
+  if(!computeTime.value){
+    computeTime.value = 30
+    const intervalId = setInterval(()=>{
+      computeTime.value--
+      if(computeTime.value <= 0){
+        clearInterval(intervalId)
+      }
+    },1000)
+  }
+}
 
 </script>
 
@@ -23,6 +36,10 @@ const loginWay = ref(true);// true代表短信登陆, false代表密码
             <div :class="{on: loginWay}">
               <section class="login_message">
                 <input type="tel" placeholder="手机号">
+                <button  class="get_verification"
+                       @click.prevent="getCode">
+                {{computeTime>0 ? `已发送(${computeTime}s)` : '获取验证码'}}
+              </button>
               </section>
               <section class="login_verification">
                 <input type="tel" placeholder="验证码">
@@ -156,5 +173,15 @@ const loginWay = ref(true);// true代表短信登陆, false代表密码
 
     }
   }
+}
+.get_verification{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  border: 0;
+  color: #ccc;
+  font-size: 14px;
+  background: transparent
 }
 </style>
